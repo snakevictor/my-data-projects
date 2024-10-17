@@ -4,12 +4,20 @@ import time
 from datetime import datetime
 from glob import glob
 from os import getcwd
-from sys import exit
 from typing import Sequence
 
 import pyspark.sql.functions as F
+from pyspark.errors.exceptions.base import PySparkAssertionError
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, when
+from pyspark.sql.types import (
+    DoubleType,
+    IntegerType,
+    StringType,
+    StructField,
+    StructType,
+)
+from pyspark.testing import assertSchemaEqual
 
 """
 Código python para leitura de arquivos txt e tratamento de dados com pyspark
@@ -17,10 +25,26 @@ Realizado como teste para o processo seletivo de engenheiro de dados da NAVA
 """
 
 __author__ = "Victor Monteiro Ribeiro"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __email__ = "victormribeiro.py@gmail.com"
 
 DIRETORIO_LOCAL = getcwd()
+SCHEMA_SALDOINICIAL = StructType(
+    [
+        StructField("Nome", StringType(), True),
+        StructField("CPF", IntegerType(), True),
+        StructField("Saldo_Inicial_CC", DoubleType(), True),
+        StructField("data", StringType(), True),
+    ]
+)
+SCHEMA_MOVIMENTACAO = StructType(
+    [
+        StructField("Nome", StringType(), True),
+        StructField("CPF", IntegerType(), True),
+        StructField("Movimentacao_dia", DoubleType(), True),
+        StructField("data", StringType(), True),
+    ]
+)
 
 
 def arquivos_para_DFs(
@@ -45,7 +69,8 @@ def arquivos_para_DFs(
                 else arquivo.split("\\")[-1]
             )
         except Exception as e:
-            return f"Não foi possível ler o arquivo {arquivo}: {e}"
+            print(f"Não foi possível ler o arquivo {arquivo}: {e}")
+            raise SystemExit
         # se nome for lista, então é uma data
         if isinstance(nome, list):
             # formata o nome pra datetime "YYYY-MM-DD"
@@ -71,7 +96,7 @@ def reformatar_dataframe(chave: datetime | Sequence[str], df: DataFrame) -> Data
             )
         except Exception as e:
             print(f"Não foi possível pivotar o dataframe: {e}")
-            exit
+            raise SystemExit
     else:
         try:
             # pivotando o dataframe para ter as colunas "data" e "Saldo_Inicial_CC"
@@ -80,7 +105,7 @@ def reformatar_dataframe(chave: datetime | Sequence[str], df: DataFrame) -> Data
             )
         except Exception as e:
             print(f"Não foi possível pivotar o dataframe: {e}")
-            exit
+            raise SystemExit
     return pivoted_df
 
 
@@ -121,7 +146,7 @@ def join_dfs(dfs: list[DataFrame], spark: SparkSession) -> DataFrame | None:
 
             except Exception as e:
                 print(f"Não foi possível mesclar os dataframes: {e}")
-                exit
+                raise SystemExit
     return full_join_df
 
 
@@ -142,6 +167,18 @@ def main():
         return "Não há arquivos suficientes para processar."
 
     dict_dfs = arquivos_para_DFs(arquivos, spark)
+
+    # conferindo schemas dos arquivos
+    for chave, df in dict_dfs.items():
+        try:
+            if isinstance(chave, datetime):
+                assertSchemaEqual(df.schema, SCHEMA_MOVIMENTACAO)
+            else:
+                assertSchemaEqual(df.schema, SCHEMA_SALDOINICIAL)
+        except PySparkAssertionError as e:
+            print(f"O arquivo {chave} nao possue o schema correto: {e}")
+            raise SystemExit
+    # reformatando e mesclando os dataframes
     dict_reformatados = {}
     for chave, valor in dict_dfs.items():
         dict_reformatados[chave] = reformatar_dataframe(chave, valor)
