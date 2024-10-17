@@ -134,7 +134,7 @@ def main():
     spark = SparkSession.builder.appName("spark-test").getOrCreate()
 
     # puxando lista de arquivos txt
-    arquivos = glob("files/*.txt")
+    arquivos = glob("*/*.txt")
 
     # criando dicionário e carregando os arquivos como dataframes
     # para dentro dele
