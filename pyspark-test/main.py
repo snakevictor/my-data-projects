@@ -157,7 +157,6 @@ def main():
         dict_reformatados[chave] for chave in lista_ordenada
     ]
 
-    # lista_ordenada = [dict_reformatados["tabela_saldo_inicial.txt"]] + lista_ordenada
     df_joined = join_dfs(lista_ordenada, spark)
     colunas = df_joined.columns
     for i in range(3, len(colunas)):
