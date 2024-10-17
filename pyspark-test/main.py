@@ -25,24 +25,24 @@ Realizado como teste para o processo seletivo de engenheiro de dados da NAVA
 """
 
 __author__ = "Victor Monteiro Ribeiro"
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __email__ = "victormribeiro.py@gmail.com"
 
 DIRETORIO_LOCAL = getcwd()
 SCHEMA_SALDOINICIAL = StructType(
     [
         StructField("Nome", StringType(), True),
-        StructField("CPF", IntegerType(), True),
+        StructField("CPF", IntegerType(), False),
         StructField("Saldo_Inicial_CC", DoubleType(), True),
-        StructField("data", StringType(), True),
+        StructField("data", StringType(), False),
     ]
 )
 SCHEMA_MOVIMENTACAO = StructType(
     [
         StructField("Nome", StringType(), True),
-        StructField("CPF", IntegerType(), True),
+        StructField("CPF", IntegerType(), False),
         StructField("Movimentacao_dia", DoubleType(), True),
-        StructField("data", StringType(), True),
+        StructField("data", StringType(), False),
     ]
 )
 
