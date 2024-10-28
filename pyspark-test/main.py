@@ -122,8 +122,8 @@ def join_dfs(dfs: list[DataFrame], spark: SparkSession) -> DataFrame | None:
             # Obtém as colunas do full_join_df e do DataFrame
             # atual e encontra a interseção de colunas entre eles
             colunas_full_join = set(full_join_df.columns)
-            columns_df_atual = set(df.columns)
-            interseccao = colunas_full_join.intersection(columns_df_atual)
+            colunas_df_atual = set(df.columns)
+            interseccao = colunas_full_join.intersection(colunas_df_atual)
             interseccao.remove("Nome"), interseccao.remove("CPF")
             if interseccao:
                 # Se houver colunas comuns,
@@ -164,7 +164,8 @@ def main():
     # criando dicionário e carregando os arquivos como dataframes
     # para dentro dele
     if len(arquivos) <= 1:
-        return "Não há arquivos suficientes para processar."
+        print("Não há arquivos suficientes para processar.")
+        raise SystemExit
 
     dict_dfs = arquivos_para_DFs(arquivos, spark)
 
@@ -183,6 +184,7 @@ def main():
     for chave, valor in dict_dfs.items():
         dict_reformatados[chave] = reformatar_dataframe(chave, valor)
 
+    # gerando lista de dataframes ordenada por data e filtrando o saldo inicial
     lista_ordenada = sorted(
         list(
             filter(
@@ -190,10 +192,12 @@ def main():
             )
         )
     )
+    # gerando lista ordenada final com saldo inicial na primeira posição
     lista_ordenada = [dict_reformatados["tabela_saldo_inicial.txt"]] + [
         dict_reformatados[chave] for chave in lista_ordenada
     ]
 
+    # realizando mesclagem dos dataframes e preenchendos os nulls
     df_joined = join_dfs(lista_ordenada, spark)
     colunas = df_joined.columns
     for i in range(3, len(colunas)):
