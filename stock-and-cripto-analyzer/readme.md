@@ -2,35 +2,29 @@
 
 <p align="center">
   <img alt="Github top language" src="https://img.shields.io/github/languages/top/SnakeVictor/my-data-projects?color=56BEB8"> <img alt="Github language count" src="https://img.shields.io/github/languages/count/SnakeVictor/my-data-projects?color=56BEB8"> <img alt="Repository size" src="https://img.shields.io/github/repo-size/SnakeVictor/my-data-projects?color=56BEB8"> <img alt="License" src="https://img.shields.io/github/license/SnakeVictor/my-data-projects?color=56BEB8">
-  <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/SnakeVictor/stock-and-cripto-analyzer?color=56BEB8" /> -->
-
-  <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/SnakeVictor/stock-and-cripto-analyzer?color=56BEB8" /> -->
-
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/SnakeVictor/stock-and-cripto-analyzer?color=56BEB8" /> -->
-
-<h2 align="center">Project Overview</h2>
-</p>
-<p align="center">
-  <img alt="Project Strutcture" src="https://raw.githubusercontent.com/snakevictor/my-data-projects/refs/heads/main/stock-and-cripto-analyzer/struct.png" height="500"/>
-</p>
-
-
-<!-- Status -->
-
-<!-- <h4 align="center"> 
-	🚧  Stock And Cripto Analyzer 🚀 Under construction...  🚧
-</h4> 
-
-<hr> -->
 
 <p align="center">
+  <a href="#project-overview">Project Overview</a> &#xa0; | &#xa0; 
+  <a href="#status">Status</a> &#xa0; | &#xa0; 
   <a href="#about">About</a> &#xa0; | &#xa0; 
   <a href="#technologies">Technologies</a> &#xa0; | &#xa0;
   <a href="license">License</a> &#xa0; | &#xa0;
   <a href="https://github.com/SnakeVictor" target="_blank">Author</a>
 </p>
 
+
+## Project Overview ##
+</p>
+<p align="center">
+  <img alt="Project Strutcture" src="https://raw.githubusercontent.com/snakevictor/my-data-projects/refs/heads/main/stock-and-cripto-analyzer/struct.png" height="500"/>
+</p>
+
 <br>
+
+## Status ##
+<h4 align="center"> 
+	🚧  Stock And Cripto Analyzer 🚀 Under construction...  🚧
+</h4> 
 
 ## About ##
 
