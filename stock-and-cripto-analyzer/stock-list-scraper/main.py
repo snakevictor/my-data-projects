@@ -12,7 +12,7 @@ TODO:
 """
 
 __author__ = "Victor Monteiro Ribeiro"
-__version__ = "0.9a"
+__version__ = "0.9b"
 __maintainer__ = "Victor Monteiro Ribeiro"
 __email__ = "victormribeiro.py@gmail.com"
 __status__ = "Development"
@@ -35,7 +35,7 @@ def upload_to_s3(file_name, bucket, object_name=None):
         raise SystemExit
 
 
-def chrome_options(options: webdriver.ChromeOptions, directory: str):
+def config_chrome_options(options: webdriver.ChromeOptions, directory: str):
     prefs = {
         "download.default_directory": directory + "\\",
         "download.prompt_for_download": False,
@@ -71,26 +71,23 @@ def main():
 
     # DEFINING CHROME OPTIONS
     chrome_options = webdriver.ChromeOptions()
-    options = chrome_options(chrome_options, directory)
+    options = config_chrome_options(chrome_options, directory)
 
     # INITIALIZING STOCK SCRAPER
-    scraper = StockScraper(service, options)
-
-    # RUNNING SCRIPT
-    scraper.start_driver()
-    scraper.click_accept()
-    scraper.wait_for_divs()
-    divs = scraper.get_shadow_root()
-    scraper.select_options(divs)
-    scraper.download_csv()
-    scraper.stop_driver()
+    scraper = StockScraper(service=service, chrome_options=options)
+    error = scraper.exec_scraping_sequence()
+    if error:
+        return error
 
     # GETTING DOWNLOADED FILE (LATEST BY MODIFICATION DATE)
     latest_file = get_latest_file(directory)
+    print(f"Arquivo {latest_file} foi baixado")
 
     # UPLOADING FILE TO S3
-    upload_to_s3(latest_file, "bucket", "stock-list-scraper")
+    # upload_to_s3(latest_file, "bucket", "stock-list-scraper")
+
+    return "Success!"
 
 
 if __name__ == "__main__":
-    main()
+    print(main())
